@@ -3,10 +3,14 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
+  <input type="text" placeholder="" id="search" />
+    <button id="searchbutton">Yolo</button>
+    <div id="target"></div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import weatherAPI from '.components/weatherAPI'
 
 export default {
   name: 'app',
