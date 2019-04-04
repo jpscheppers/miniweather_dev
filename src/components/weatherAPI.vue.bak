@@ -1,0 +1,129 @@
+<template>
+  <div>
+    <input type="text" v-on:keyup.enter="getWeather" v-model="city">
+    <button type="submit" v-on:click="getWeather">Get weather now!</button>
+  </div>
+</template>
+<script>
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
+
+
+export default {
+  data() {
+    return {
+      info:'',
+      city:'',
+      currentTemp:'',
+      minTemp:'',
+      maxTemp:'',
+      pressure:'',
+      humidity:'',
+      wind:'',
+      overcast:'',
+      icon:'',
+      sunrise:'',
+      sunset:'',
+      slobu:''
+    }
+  },
+  methods: {
+    getWeather: function() {
+      // let url =
+      //   'api.openweathermap.org/data/2.5/weather?q='+this.city+'Brussels&?units=metric&APPID=fead09aadf4f208af0a79233ca98019d';
+
+      axios
+        .get('api.openweathermap.org/data/2.5/weather?q='+this.city+'&units=metric&APPID=fead09aadf4f208af0a79233ca98019d')
+        .then(response=>
+         {
+           this.info = response.data.list;
+           this.currentTemp = response.data.main.temp;
+           this.minTemp = response.data.main.temp_min;
+           this.maxTemp = response.data.main.temp_max;
+           this.pressure = response.data.main.pressure;
+           this.humidity = response.data.main.humidity + "%";
+           this.wind = response.data.wind.speed + "m/s";
+           this.overcast = response.data.weather[0].description;
+           this.icon =
+             "assets/images/" + response.data.weather[0].icon.slice(0, 2) + ".svg";
+           this.sunrise = new Date(response.data.sys.sunrise * 1000)
+             .toLocaleTimeString("en-GB")
+             .slice(0, 4);
+           this.sunset = new Date(response.data.sys.sunset * 1000)
+             .toLocaleTimeString("en-GB")
+             .slice(0, 4);
+         })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  },
+//   beforeMount() {
+//     this.getWeather();
+//   }
+// }
+};
+</script>
+
+<style>
+body {
+  background: #3d4869; /* Old browsers */
+  background: -moz-linear-gradient(#3d4869, #263048) fixed; /* FF3.6-15 */
+  background: -webkit-linear-gradient(#3d4869, #263048) fixed; /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(#3d4869, #263048) fixed; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background-repeat: no-repeat;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  text-shadow: 0px 0px 2px #000000;
+  color: #ffffff;
+}
+
+#app {
+  background: url(/assets/images/blog.jpg) no-repeat;
+
+  width: 520px;
+  height: 170px;
+
+  position: absolute;
+  top: 35%;
+  left: 35%;
+}
+
+#weather {
+  padding: 15px;
+  vertical-align: middle;
+}
+
+.temperature {
+  font-family: "Vast Shadow", cursive;
+  font-size: 40px;
+  vertical-align: top;
+  position: absolute;
+  left: 80px;
+}
+
+#temp-values {
+  text-align: right;
+  text-justify: distribute;
+  display: block;
+  position: relative;
+  top: -60px;
+}
+
+#info {
+  padding-left: 20px;
+  position: relative;
+  top: -20px;
+}
+
+.icon {
+  position: inherit;
+  top: 2px;
+  padding-left: 8px;
+}
+</style>
+
+
+
+

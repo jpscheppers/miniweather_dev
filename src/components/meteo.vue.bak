@@ -1,0 +1,81 @@
+<template>
+  <div>
+    <input type="text" v-on:keyup.enter="getWeather" v-model="city">
+    <button type="submit" v-on:click="getWeather">Get weather now!</button>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+	data() {
+		return {
+      info:'',
+      city:'',
+      currentTemp:'',
+      minTemp:'',
+      maxTemp:'',
+      pressure:'',
+      humidity:'',
+      wind:'',
+      overcast:'',
+      icon:'',
+      sunrise:'',
+      sunset:'',
+		}
+	},
+	methods: {
+    getWeather: function() {
+      // let url =
+      //   'api.openweathermap.org/data/2.5/weather?q='+this.city+'Brussels&?units=metric&APPID=fead09aadf4f208af0a79233ca98019d';
+
+      axios
+        .get('api.openweathermap.org/data/2.5/weather?q='+this.city+'&units=metric&APPID=fead09aadf4f208af0a79233ca98019d')
+        .then(response=>
+         {
+           this.info = response.data.list;
+           this.currentTemp = response.data.main.temp;
+           this.minTemp = response.data.main.temp_min;
+           this.maxTemp = response.data.main.temp_max;
+           this.pressure = response.data.main.pressure;
+           this.humidity = response.data.main.humidity + "%";
+           this.wind = response.data.wind.speed + "m/s";
+           this.overcast = response.data.weather[0].description;
+           this.icon =
+             "assets/images/" + response.data.weather[0].icon.slice(0, 2) + ".svg";
+           this.sunrise = new Date(response.data.sys.sunrise * 1000)
+             .toLocaleTimeString("en-GB")
+             .slice(0, 4);
+           this.sunset = new Date(response.data.sys.sunset * 1000)
+             .toLocaleTimeString("en-GB")
+             .slice(0, 4);
+         })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  },
+//   beforeMount() {
+//     this.getWeather();
+//   }
+// }
+};
+</script>
+
+<style>
+ @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css");
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
